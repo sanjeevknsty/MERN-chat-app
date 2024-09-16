@@ -9,12 +9,14 @@ const CreateGroup = () => {
   const initialRef = React.useRef(null)
 
   const context = useContext(userContext)
-  const { searchResults, handleSearch,user } = context
+  const { searchResults, handleSearch,user,onUpload,profilePicture} = context
 
   const [value, setValue] = useState()
   const [groupUser, setGroupUser] = useState()
   const [tittle,setTittle] = useState()
   const [addedUsers ,setAddUsers] = useState()
+
+  // console.log(groupUser,addedUsers)
 
   const handleTittleChange = (e)=>{
     e.preventDefault()
@@ -24,7 +26,7 @@ const CreateGroup = () => {
   const handleChange = (e) => {
     e.preventDefault()
     setValue(e.target.value)
-    handleSearch(value)
+    handleSearch(user.token,value)
   }
 
   const handleClickAddUser = (ele) => {
@@ -44,10 +46,22 @@ const CreateGroup = () => {
 
   }
 
-  const handleRemove =()=>{
+  const handleRemove =(ele)=>{
     //delete the user having the id
+    const groupuserFiltered = groupUser.filter( id => id._id !== ele)
+    const addedUsersFiltered = addedUsers.filter( id => id !== ele)
+
+    setAddUsers(addedUsersFiltered)
+    setGroupUser(groupuserFiltered)
 
   }
+
+
+  // const handleClose = ()=>{
+  //   setGroupUser('')
+  //   setAddUsers('')
+  // }
+
   const handleClickCreateGroup = async() => {
     try {
       const config = {
@@ -56,11 +70,11 @@ const CreateGroup = () => {
           Authorization : `Bearer ${user.token}`
         }
       }
-      const {data} = await axios.post("http://localhost:5000/api/chat/groupchat",{name : tittle ,users : addedUsers},config)
+      const {data} = await axios.post("http://localhost:5000/api/chat/groupchat",{name : tittle ,users : addedUsers,profilePicture},config)
       console.log(data)
       
     } catch (error) {
-      console.log("jnsfkjsnfnsfkdj")
+      console.log(error)
     }
    onClose() 
   }
@@ -68,8 +82,8 @@ const CreateGroup = () => {
 
   return (
     <>
-      <Button mt={3} ref={btnRef} onClick={onOpen}>
-        Trigger modal
+      <Button ref={btnRef} onClick={onOpen} ml="auto" mr="3" p={3}> 
+        Create Group
       </Button>
 
       <Modal
@@ -106,6 +120,11 @@ const CreateGroup = () => {
                 }
 
               </Stack>
+              <div className="custom-file">
+          <input type="file" className="custom-file-input" id="validatedCustomFile" required  onChange={onUpload}/>
+          <label className="custom-file-label" htmlFor="validatedCustomFile">Choose file...</label>
+          <div className="invalid-feedback">Example invalid custom file feedback</div>
+        </div>
             </FormControl>
             {searchResults && searchResults.map((element) => {
               return <Card key={element._id} onClick={() => { handleClickAddUser(element) }} >
@@ -118,9 +137,9 @@ const CreateGroup = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={handleClickCreateGroup}>
-              Save
-            </Button>
+            {groupUser && <Button colorScheme='blue' mr={3} onClick={handleClickCreateGroup}>
+              Create
+            </Button>}
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

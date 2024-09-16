@@ -62,7 +62,7 @@ const Navbar = () => {
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg="#111" color={"#cecdcd"}>
           <DrawerCloseButton />
           <DrawerHeader>Search for User</DrawerHeader>
 

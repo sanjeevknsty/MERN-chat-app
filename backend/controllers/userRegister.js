@@ -6,7 +6,7 @@ var createError = require('http-errors')
 
 const userSignup = asyncHandler(async (req, res, next) => {
   const { email, password, name,profilePticture} = req.body
-  console.log(email,password)
+  // console.log(email,password)
   if (!email || !password || !name) {
     return next('400', "Enter Valid Credentials")
   }
@@ -50,7 +50,7 @@ const userSignup = asyncHandler(async (req, res, next) => {
 const userLogin = asyncHandler(async (req, res, next) => {
 
   const { email, password } = req.body
-  console.log(email,password)
+  // console.log(email,password)
 
   try {
 
@@ -91,7 +91,7 @@ try {
       {email : {$regex: req.query.search ,$options : "i"}},
     ]
   } : {};
-  console.log(searchName)
+  // console.log(searchName)
 
 
   const user = await userModel.find(searchName).find({_id : {$ne : req.user._id}})

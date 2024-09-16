@@ -7,9 +7,9 @@ const userModel = require("../models/User")
 const accesschat = asyncHandler(async (req, res, next) => {
 
   const { userId } = req.body
-  console.log(userId)
+  // console.log(userId)
   if (!userId) {
-    return next(createHttpError(500, "UserId Does Not Exists"))
+    return next(createHttpError(500, "provide UserId"))
   }
   try {
 
@@ -32,6 +32,7 @@ const accesschat = asyncHandler(async (req, res, next) => {
       })
 
       const fullChat = await chatModel.findOne({ _id: createChat._id }).populate('users', '-password')
+      // await createChat.populate('users', '-password')
       return res.send(fullChat)
     }
     else {
@@ -70,7 +71,7 @@ const fetchchats = asyncHandler(async (req, res, next) => {
 
 const groupChat = asyncHandler(async (req, res, next) => {
   const { name, users } = req.body
-  console.log(name,users)
+  // console.log(name,users)
   if (!name || !users) {
     return next(createHttpError(400, "Enter all the Fields"))
   }
@@ -87,7 +88,7 @@ const groupChat = asyncHandler(async (req, res, next) => {
       groupAdmin: req.user
     })
 
-    console.log(groupChat)
+    // console.log(groupChat)
     const group = await chatModel.findOne({ _id: groupChat._id }).populate('users', "-password").populate('groupAdmin', "-password")
     return res.send(group)
   } catch (error) {
@@ -126,7 +127,7 @@ const addUserToGroup = asyncHandler(async (req, res, next) => {
 
 const deleteUser = asyncHandler(async (req, res, next) => {
   const { userId, groupId } = req.body
-  console.log(userId)
+  // console.log(userId)
   try {
     const group = await chatModel.findByIdAndUpdate({ _id: groupId }, { $pull: { users: userId } }, { new: true }).populate("users", "-password").populate("groupAdmin", "-password")
 

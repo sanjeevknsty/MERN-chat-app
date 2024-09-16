@@ -17,42 +17,41 @@ var userSignup = asyncHandler(function _callee(req, res, next) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _req$body = req.body, email = _req$body.email, password = _req$body.password, name = _req$body.name, profilePticture = _req$body.profilePticture;
-          console.log(email, password);
+          _req$body = req.body, email = _req$body.email, password = _req$body.password, name = _req$body.name, profilePticture = _req$body.profilePticture; // console.log(email,password)
 
           if (!(!email || !password || !name)) {
-            _context.next = 4;
+            _context.next = 3;
             break;
           }
 
           return _context.abrupt("return", next('400', "Enter Valid Credentials"));
 
-        case 4:
-          _context.prev = 4;
-          _context.next = 7;
+        case 3:
+          _context.prev = 3;
+          _context.next = 6;
           return regeneratorRuntime.awrap(userModel.findOne({
             email: email
           }));
 
-        case 7:
+        case 6:
           userExists = _context.sent;
 
           if (userExists) {
-            _context.next = 22;
+            _context.next = 21;
             break;
           }
 
-          _context.next = 11;
+          _context.next = 10;
           return regeneratorRuntime.awrap(bycrpt.genSalt(10));
 
-        case 11:
+        case 10:
           salt = _context.sent;
-          _context.next = 14;
+          _context.next = 13;
           return regeneratorRuntime.awrap(bycrpt.hash(password, salt));
 
-        case 14:
+        case 13:
           securePassword = _context.sent;
-          _context.next = 17;
+          _context.next = 16;
           return regeneratorRuntime.awrap(userModel.create({
             email: email,
             password: securePassword,
@@ -60,7 +59,7 @@ var userSignup = asyncHandler(function _callee(req, res, next) {
             profilePticture: profilePticture
           }));
 
-        case 17:
+        case 16:
           user = _context.sent;
           token = generateToken(user._id);
           return _context.abrupt("return", res.status(200).json({
@@ -72,24 +71,24 @@ var userSignup = asyncHandler(function _callee(req, res, next) {
             token: token
           }));
 
-        case 22:
+        case 21:
           return _context.abrupt("return", next(createError('400', "User Exists")));
 
-        case 23:
-          _context.next = 28;
+        case 22:
+          _context.next = 27;
           break;
 
-        case 25:
-          _context.prev = 25;
-          _context.t0 = _context["catch"](4);
+        case 24:
+          _context.prev = 24;
+          _context.t0 = _context["catch"](3);
           return _context.abrupt("return", next(createError('500', _context.t0.message)));
 
-        case 28:
+        case 27:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[4, 25]]);
+  }, null, null, [[3, 24]]);
 });
 var userLogin = asyncHandler(function _callee2(req, res, next) {
   var _req$body2, email, password, userExists, verifyPassword, token, data;
@@ -98,36 +97,36 @@ var userLogin = asyncHandler(function _callee2(req, res, next) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          _req$body2 = req.body, email = _req$body2.email, password = _req$body2.password;
-          console.log(email, password);
-          _context2.prev = 2;
-          _context2.next = 5;
+          _req$body2 = req.body, email = _req$body2.email, password = _req$body2.password; // console.log(email,password)
+
+          _context2.prev = 1;
+          _context2.next = 4;
           return regeneratorRuntime.awrap(userModel.findOne({
             email: email
           }));
 
-        case 5:
+        case 4:
           userExists = _context2.sent;
 
           if (!userExists) {
-            _context2.next = 17;
+            _context2.next = 16;
             break;
           }
 
-          _context2.next = 9;
+          _context2.next = 8;
           return regeneratorRuntime.awrap(bycrpt.compare(password, userExists.password));
 
-        case 9:
+        case 8:
           verifyPassword = _context2.sent;
 
           if (verifyPassword) {
-            _context2.next = 12;
+            _context2.next = 11;
             break;
           }
 
           return _context2.abrupt("return", next(createError(400, "Wrong Password")));
 
-        case 12:
+        case 11:
           token = generateToken(userExists._id);
           data = {
             _id: userExists._id,
@@ -139,25 +138,25 @@ var userLogin = asyncHandler(function _callee2(req, res, next) {
           };
           return _context2.abrupt("return", res.status(200).send(data));
 
-        case 17:
+        case 16:
           return _context2.abrupt("return", next(createError('400', "User Does Not Exists")));
 
-        case 18:
-          _context2.next = 24;
+        case 17:
+          _context2.next = 23;
           break;
 
-        case 20:
-          _context2.prev = 20;
-          _context2.t0 = _context2["catch"](2);
+        case 19:
+          _context2.prev = 19;
+          _context2.t0 = _context2["catch"](1);
           console.log("error");
           return _context2.abrupt("return", next(createError('500', "user not in data base")));
 
-        case 24:
+        case 23:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[2, 20]]);
+  }, null, null, [[1, 19]]);
 });
 var searchUser = asyncHandler(function _callee3(req, res, next) {
   var searchName, user;
@@ -178,30 +177,30 @@ var searchUser = asyncHandler(function _callee3(req, res, next) {
                 $options: "i"
               }
             }]
-          } : {};
-          console.log(searchName);
-          _context3.next = 5;
+          } : {}; // console.log(searchName)
+
+          _context3.next = 4;
           return regeneratorRuntime.awrap(userModel.find(searchName).find({
             _id: {
               $ne: req.user._id
             }
           }));
 
-        case 5:
+        case 4:
           user = _context3.sent;
           return _context3.abrupt("return", res.status(200).send(user));
 
-        case 9:
-          _context3.prev = 9;
+        case 8:
+          _context3.prev = 8;
           _context3.t0 = _context3["catch"](0);
           return _context3.abrupt("return", next(createError(500, _context3.t0.message)));
 
-        case 12:
+        case 11:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[0, 9]]);
+  }, null, null, [[0, 8]]);
 });
 module.exports = {
   userSignup: userSignup,

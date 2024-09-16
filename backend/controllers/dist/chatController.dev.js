@@ -14,19 +14,18 @@ var accesschat = asyncHandler(function _callee(req, res, next) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          userId = req.body.userId;
-          console.log(userId);
+          userId = req.body.userId; // console.log(userId)
 
           if (userId) {
-            _context.next = 4;
+            _context.next = 3;
             break;
           }
 
-          return _context.abrupt("return", next(createHttpError(500, "UserId Does Not Exists")));
+          return _context.abrupt("return", next(createHttpError(500, "provide UserId")));
 
-        case 4:
-          _context.prev = 4;
-          _context.next = 7;
+        case 3:
+          _context.prev = 3;
+          _context.next = 6;
           return regeneratorRuntime.awrap(chatModel.find({
             isGroup: false,
             $and: [{
@@ -44,50 +43,50 @@ var accesschat = asyncHandler(function _callee(req, res, next) {
             }]
           }).populate('users', '-password').populate('latestMessage'));
 
-        case 7:
+        case 6:
           chatExists = _context.sent;
 
           if (chatExists.length) {
-            _context.next = 18;
+            _context.next = 17;
             break;
           }
 
-          _context.next = 11;
+          _context.next = 10;
           return regeneratorRuntime.awrap(chatModel.create({
             chatName: "sender",
             isGroup: false,
             users: [req.user._id, userId]
           }));
 
-        case 11:
+        case 10:
           createChat = _context.sent;
-          _context.next = 14;
+          _context.next = 13;
           return regeneratorRuntime.awrap(chatModel.findOne({
             _id: createChat._id
           }).populate('users', '-password'));
 
-        case 14:
+        case 13:
           fullChat = _context.sent;
           return _context.abrupt("return", res.send(fullChat));
 
-        case 18:
+        case 17:
           return _context.abrupt("return", res.send(chatExists));
 
-        case 19:
-          _context.next = 24;
+        case 18:
+          _context.next = 23;
           break;
 
-        case 21:
-          _context.prev = 21;
-          _context.t0 = _context["catch"](4);
+        case 20:
+          _context.prev = 20;
+          _context.t0 = _context["catch"](3);
           return _context.abrupt("return", next(createHttpError(500, _context.t0.message)));
 
-        case 24:
+        case 23:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[4, 21]]);
+  }, null, null, [[3, 20]]);
 });
 var fetchchats = asyncHandler(function _callee2(req, res, next) {
   var chatExists;
@@ -143,29 +142,28 @@ var groupChat = asyncHandler(function _callee3(req, res, next) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          _req$body = req.body, name = _req$body.name, users = _req$body.users;
-          console.log(name, users);
+          _req$body = req.body, name = _req$body.name, users = _req$body.users; // console.log(name,users)
 
           if (!(!name || !users)) {
-            _context3.next = 4;
+            _context3.next = 3;
             break;
           }
 
           return _context3.abrupt("return", next(createHttpError(400, "Enter all the Fields")));
 
-        case 4:
+        case 3:
           users.push(req.user);
 
           if (!(users.length < 2)) {
-            _context3.next = 7;
+            _context3.next = 6;
             break;
           }
 
           return _context3.abrupt("return", next(createHttpError(400, "Users should be more than 2 members")));
 
-        case 7:
-          _context3.prev = 7;
-          _context3.next = 10;
+        case 6:
+          _context3.prev = 6;
+          _context3.next = 9;
           return regeneratorRuntime.awrap(chatModel.create({
             name: name,
             isGroup: true,
@@ -173,29 +171,28 @@ var groupChat = asyncHandler(function _callee3(req, res, next) {
             groupAdmin: req.user
           }));
 
-        case 10:
+        case 9:
           _groupChat = _context3.sent;
-          console.log(_groupChat);
-          _context3.next = 14;
+          _context3.next = 12;
           return regeneratorRuntime.awrap(chatModel.findOne({
             _id: _groupChat._id
           }).populate('users', "-password").populate('groupAdmin', "-password"));
 
-        case 14:
+        case 12:
           group = _context3.sent;
           return _context3.abrupt("return", res.send(group));
 
-        case 18:
-          _context3.prev = 18;
-          _context3.t0 = _context3["catch"](7);
+        case 16:
+          _context3.prev = 16;
+          _context3.t0 = _context3["catch"](6);
           next(createHttpError(500, _context3.t0.message));
 
-        case 21:
+        case 19:
         case "end":
           return _context3.stop();
       }
     }
-  }, null, null, [[7, 18]]);
+  }, null, null, [[6, 16]]);
 });
 var rename = asyncHandler(function _callee4(req, res, next) {
   var _req$body2, id, name, findGroup;
@@ -274,10 +271,10 @@ var deleteUser = asyncHandler(function _callee6(req, res, next) {
     while (1) {
       switch (_context6.prev = _context6.next) {
         case 0:
-          _req$body4 = req.body, userId = _req$body4.userId, groupId = _req$body4.groupId;
-          console.log(userId);
-          _context6.prev = 2;
-          _context6.next = 5;
+          _req$body4 = req.body, userId = _req$body4.userId, groupId = _req$body4.groupId; // console.log(userId)
+
+          _context6.prev = 1;
+          _context6.next = 4;
           return regeneratorRuntime.awrap(chatModel.findByIdAndUpdate({
             _id: groupId
           }, {
@@ -288,21 +285,21 @@ var deleteUser = asyncHandler(function _callee6(req, res, next) {
             "new": true
           }).populate("users", "-password").populate("groupAdmin", "-password"));
 
-        case 5:
+        case 4:
           group = _context6.sent;
           return _context6.abrupt("return", res.send(group));
 
-        case 9:
-          _context6.prev = 9;
-          _context6.t0 = _context6["catch"](2);
+        case 8:
+          _context6.prev = 8;
+          _context6.t0 = _context6["catch"](1);
           return _context6.abrupt("return", next(createHttpError(500, _context6.t0.message)));
 
-        case 12:
+        case 11:
         case "end":
           return _context6.stop();
       }
     }
-  }, null, null, [[2, 9]]);
+  }, null, null, [[1, 8]]);
 });
 module.exports = {
   accesschat: accesschat,

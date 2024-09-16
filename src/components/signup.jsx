@@ -1,42 +1,23 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
 
   const navigate = useNavigate()
-
+  const context = useContext(useState)
+  const [profilePicture,uploadImage,onUpload] = context
 
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", confirmPassword: "" })
-  const [pic,setPic] = useState()
-  const [ profilePicture, setProfilePicture ] = useState("");
+
 
 
   const onChange = (event) => {
     setCredentials({ ...credentials, [event.target.name]: event.target.value })
 
   }
-  const onUpload = (e) =>{
-    setPic(e.target.files[0])
-    
-  }
 
-  const uploadImage = () => {
-    const data = new FormData()
-    data.append("file", pic)
-    data.append("upload_preset", "ml_default")
-    data.append("cloud_name","djjwwhzh8")
-    fetch("https://api.cloudinary.com/v1_1/djjwwhzh8/image/upload",{
-    method:"post",
-    body: data
-    })
-    .then(resp => resp.json())
-    .then(data => {
-    setProfilePicture(data.url)
-    })
-    .catch(err => console.log(err))
-    }
 
   const handleSignUp = async (e) => {
 

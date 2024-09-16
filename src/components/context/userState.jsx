@@ -9,6 +9,9 @@ const UserState =({children})=> {
   const [user,setUser] = useState()
   const [chats,setChats] = useState()
   const [searchResults,setSearchResults] = useState()
+  const [ selectedChat,setSelectedChat] = useState()
+  const [pic,setPic] = useState()
+  const [ profilePicture, setProfilePicture ] = useState("");
 // console.log(user._id)
   useEffect(() => {
     try {
@@ -30,16 +33,16 @@ const UserState =({children})=> {
 
     }
    
-  },[])
+  },[navigate])
 
 
-  const handleSearch = async (value) => {
+  const handleSearch = async (token , value) => {
     // e.preventDefault()
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
-          "Authorization": `Bearer ${user.token}`
+          "Authorization": `Bearer ${token}`
         }
       }
       setSearchResults('')
@@ -51,10 +54,31 @@ const UserState =({children})=> {
     }
   }
 
+  const onUpload = (e) =>{
+    setPic(e.target.files[0])
+    
+  }
+
+  const uploadImage = () => {
+    const data = new FormData()
+    data.append("file", pic)
+    data.append("upload_preset", "ml_default")
+    data.append("cloud_name","djjwwhzh8")
+    fetch("https://api.cloudinary.com/v1_1/djjwwhzh8/image/upload",{
+    method:"post",
+    body: data
+    })
+    .then(resp => resp.json())
+    .then(data => {
+    setProfilePicture(data.url)
+    })
+    .catch(err => console.log(err))
+    }
+
 
   return (
     <div>
-      <UserContext.Provider value={{ user ,chats,setChats,handleSearch,searchResults}}>
+      <UserContext.Provider value={{ user ,chats,setChats,handleSearch,searchResults,selectedChat,setSelectedChat,onUpload,uploadImage,profilePicture,setProfilePicture}}>
         {children}
       </UserContext.Provider>
     </div>

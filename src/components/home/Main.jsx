@@ -1,22 +1,24 @@
-import { Box, Flex} from '@chakra-ui/react'
-import React from 'react'
+import { Box, Flex } from '@chakra-ui/react'
+import React, { useContext } from 'react'
 import ChatSection from './ChatSection'
 import MessageSection from './MessageSection'
+import userContext from '../context/userContext'
 const Main = () => {
+  const context = useContext(userContext)
+  const { selectedChat } = context
   return (
-    <div>
-      <Box bg='purple' w='100%' h="90vh" p={4} color='white'>
-        <Flex>
-        <Box  bg='green' w='40%' h="80vh" p={4} color='white'>
-          <ChatSection/>
-        </Box>
-        <Box  bg='red' w='60%' h="80vh" p={4} color='white'>
-          <MessageSection/>
-        </Box>
-        </Flex>
-      </Box>
+    <>
+      <Flex flex={1} bg='#191919' w='100%' h="80%" p={0} >
+          <Box w='30%' h="100%" p={2} color='white' borderRight={"1px solid rgba(170, 170, 170,0.5)"}>
+            <ChatSection />
+          </Box>
+          <Box w='70%' h="100%" p={0} color='white'>
+            {selectedChat && <MessageSection />}
 
-    </div>
+          </Box>
+      </Flex>
+
+    </>
   )
 }
 

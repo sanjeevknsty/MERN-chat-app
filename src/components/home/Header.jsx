@@ -4,11 +4,11 @@ import Navbar from './Navbar'
 
 const Header = () => {
   return (
-    <div>
-      <Box bg='tomato' w='100%' h="4vw" p={4} color='white'>
-        <Navbar/>
-</Box>
-    </div>
+    <>
+      <Box bg='#0F0F0F' w='100%' p={4}>
+        <Navbar />
+      </Box>
+    </>
   )
 }
 
